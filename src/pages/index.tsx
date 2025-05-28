@@ -1,113 +1,253 @@
 import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import { motion } from "framer-motion";
+import CustomImage from "../assets/images/image.jpg";
+import Button from "@/components/shared/Button";
+import Card from "@/components/shared/Card";
+import { Rocket, BarChart, ShieldCheck } from "lucide-react";
+import useFetch from "hooks/useFetch";
+import { useEffect, useState } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+export interface Post {
+  id: string;
+  title: string;
+  body: string;
+}
 
 export default function Home() {
+  const { data: initialPosts, loading } = useFetch<Post[]>(
+    "https://jsonplaceholder.typicode.com/posts"
+  );
+  const [posts, setPosts] = useState<Post[] | null>(null);
+
+  useEffect(() => {
+    if (initialPosts) {
+      setPosts(initialPosts);
+    }
+  }, [initialPosts]);
+
+  const handleDelete = (id: string) => {
+    if (posts) {
+      setPosts(posts.filter((post) => post.id !== id));
+    }
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/pages/index.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="min-h-screen bg-white">
+      <main>
+        {/* Hero Section */}
+        <div className="relative bg-purple-600 min-h-[60vh] flex flex-col justify-center items-center text-center px-6">
+          <motion.div
+            className="max-w-3xl z-10"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+              Mirë se Vini në Aplikacionin Tonë!
+            </h1>
+            <p className="text-lg md:text-xl text-white/90 mb-8">
+              Ndërtoni aplikacione të fuqishme dhe të shpejta me Next.js
+            </p>
+            <Button text="Mëso Më Shumë" variant="secondary" onClick={() => alert("Redirecting...")} />
+          </motion.div>
+        </div>
+
+        {/* About Section */}
+        <div className="relative bg-purple-50 py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              className="text-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-4xl font-bold text-purple-600 mb-6">
+                Rreth Nesh
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-12">
+                Ne krijojmë aplikacione të avancuara duke përdorur teknologjitë më të fundit. Fokusimi ynë kryesor është të ofrojmë produkte të optimizuara dhe SEO-friendly.
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="w-full max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-xl"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <Image
+                src={CustomImage}
+                alt="Mountain landscape with flowers"
+                width={1200}
+                height={675}
+                className="w-full h-auto object-cover"
+                priority
+              />
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Features Section */}
+        <div className="bg-white py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-4xl font-bold text-purple-600 mb-8">
+                Karakteristikat Kryesore
+              </h2>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              <motion.div
+                className="text-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                <div className="flex justify-center mb-4">
+                  <Rocket className="w-12 h-12 text-purple-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  Shpejtësi & Performancë
+                </h3>
+                <p className="text-gray-600">
+                  Aplikacione moderne dhe të shpejta për përdoruesit
+                </p>
+              </motion.div>
+
+              <motion.div
+                className="text-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+              >
+                <div className="flex justify-center mb-4">
+                  <BarChart className="w-12 h-12 text-purple-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  SEO e Avancuar
+                </h3>
+                <p className="text-gray-600">
+                  Rankim më i mirë në motorët e kërkimit
+                </p>
+              </motion.div>
+
+              <motion.div
+                className="text-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+              >
+                <div className="flex justify-center mb-4">
+                  <ShieldCheck className="w-12 h-12 text-purple-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  Siguri Maksimale
+                </h3>
+                <p className="text-gray-600">
+                  Mbrojtje e avancuar e të dhënave të përdoruesit
+                </p>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+
+        {/* Services Section */}
+        <div className="bg-purple-50 py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-4xl font-bold text-purple-600 mb-6">
+                Shërbimet Tona
+              </h2>
+              <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
+                Ofrojmë një gamë të gjerë shërbimesh duke përfshirë zhvillimin e aplikacioneve web, optimizimin për SEO dhe integrimin me API të jashtme
+              </p>
+              <Button text="Shikoni Shërbimet" variant="primary" onClick={() => alert("Redirecting...")} />
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Blog Section */}
+        <div className="bg-white py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              className="text-center mb-12"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-4xl font-bold text-purple-600 mb-6">Blogs</h2>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {loading ? (
+                <div className="col-span-full flex justify-center">
+                  <CircularProgress className="text-purple-600" />
+                </div>
+              ) : (
+                posts &&
+                posts.map((post) => (
+                  <motion.div
+                    key={post.id}
+                    className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow border border-gray-100"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    <h3 className="text-xl font-semibold text-purple-900 mb-4 line-clamp-2">
+                      {post.title}
+                    </h3>
+                    <p className="text-gray-600 mb-6 line-clamp-3">{post.body}</p>
+                    <button
+                      onClick={() => handleDelete(post.id)}
+                      className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                    >
+                      Fshij Postin
+                    </button>
+                  </motion.div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Contact Section */}
+        <div className="bg-purple-600 py-24 text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              className="text-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-4xl font-bold mb-12">
+                Kontaktoni Me Ne
+              </h2>
+              <div className="space-y-4 mb-8">
+                <p className="text-lg">Email: contact@mycompany.com</p>
+                <p className="text-lg">Tel: +383 123 456 789</p>
+                <p className="text-lg">Adresa: Prishtinë, Kosovë</p>
+              </div>
+              <Button 
+                text="Na Kontaktoni" 
+                variant="secondary" 
+                onClick={() => alert("Opening Contact Form...")} 
+              />
+            </motion.div>
+          </div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
+
+Home.displayName = "My Application";

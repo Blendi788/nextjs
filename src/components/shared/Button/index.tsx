@@ -1,0 +1,37 @@
+import clsx from "classnames";
+import { motion } from "framer-motion";
+
+interface Props {
+  text: string;
+  onClick?: () => void;
+  variant?: "primary" | "secondary" | "tertiary" | "quaternary";
+  type?: "button" | "submit" | "reset";
+}
+
+const Button = (props: Props) => {
+  const { text, onClick, variant = "primary", type = "button" } = props;
+
+  const buttonStyles = {
+    primary: "bg-purple-600 hover:bg-purple-700 text-white border-transparent",
+    secondary: "bg-white text-purple-600 border border-purple-600 hover:bg-gray-50",
+    tertiary: "bg-gray-200 hover:bg-gray-300 text-gray-800",
+    quaternary: "bg-gray-300 hover:bg-gray-400 text-gray-800",
+  };
+
+  return (
+    <motion.button
+      type={type}
+      className={clsx(
+        "px-6 py-3 rounded-full font-medium transition-all",
+        buttonStyles[variant]
+      )}
+      onClick={onClick}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      {text}
+    </motion.button>
+  );
+};
+
+export default Button;
