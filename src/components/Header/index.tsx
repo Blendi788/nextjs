@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Logo from "../../assets/images/Logo.src.png";
 import classNames from "classnames";
 import { signOut, useSession } from "next-auth/react";
+import Logo from "../Logo";
 
 export default function Header() {
   const { data: session, status } = useSession();
@@ -23,7 +23,7 @@ export default function Header() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/">
-              <img src={Logo.src} alt="Logo" className="h-8 w-auto" />
+              <Logo className="h-8 w-auto" />
             </Link>
           </div>
 
